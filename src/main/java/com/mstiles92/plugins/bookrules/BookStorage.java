@@ -27,9 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-
+import java.util.ListIterator;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -67,6 +69,7 @@ public class BookStorage {
 	/**
 	 * Get the instance of this singleton class.
 	 * 
+     * @param plugin The instance of the plugin that this singleton should act on.
 	 * @return the instance of this class
 	 */
 	public static BookStorage getInstance(BookRulesPlugin plugin) {
@@ -271,17 +274,33 @@ public class BookStorage {
 	private ItemStack getBook(int id) {
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
 		BookMeta meta = (BookMeta) book.getItemMeta();
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add("BookRules");
-
+        
 		meta.setAuthor(books.getString("Books." + id + ".Author"));
 		meta.setTitle(books.getString("Books." + id + ".Title"));
-		meta.setPages(books.getStringList("Books." + id + ".Pages"));
-		meta.setLore(lore);
+		meta.setPages(formatPages(books.getStringList("Books." + id + ".Pages")));
+		meta.setLore(books.getStringList("Books." + id + ".Lore"));
 		book.setItemMeta(meta);
 		
 		return book;
 	}
+    
+    /**
+     * Formats the pages when using &amp; colour codes.
+     * 
+     * @param pages The book pages to format.
+     * @return The formatted pages.
+     */
+    private List<String> formatPages(List<String> pages) {
+        ListIterator<String> iterator = pages.listIterator();
+        
+        if (iterator.hasNext())
+        {
+            String s = iterator.next();
+            iterator.set(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        
+        return pages;
+    }
 	
 	/**
 	 * Check if a player has received the specified book before.
