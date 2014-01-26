@@ -106,9 +106,9 @@ public class LocalizationHandler {
 		String[] keys = key.split("\\.");
 		Object string = this.jsonObject;
 		
-		for (int i = 0; i < keys.length; i++) {
-			string = (string == null) ? null : ((Map) string).get(keys[i]);
-		}
+        for (String key1 : keys) {
+            string = (string == null) ? null : ((Map) string).get(key1);
+        }
 		
 		return (string == null) ? null : string.toString();
 	}

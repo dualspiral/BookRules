@@ -60,17 +60,7 @@ public class BookRulesPlugin extends JavaPlugin {
 		getCommand("rulebook").setExecutor(new BookRulesCommandExecutor(this));
 		getServer().getPluginManager().registerEvents(new BookRulesEventListener(this), this);
 		
-		latestKnownVersion = this.getDescription().getVersion();
-		if (getConfig().getBoolean("Check-for-Updates")) {
-			getServer().getScheduler().runTaskTimer(this, new UpdateChecker(this), 40, 216000);
-		}
-		
-		try {
-			BukkitMetrics metrics = new BukkitMetrics(this);
-			metrics.start();
-		} catch (IOException e) {
-			logWarning(Localization.getString(Strings.METRICS_START_FAILURE));
-		}
+        // Metrics and version updating have been removed due to this being a custom implementation
 	}
 	
 	public void onDisable() {
